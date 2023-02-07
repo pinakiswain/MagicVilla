@@ -13,27 +13,29 @@ namespace MagicVilla_VillaAPI.Controllers
     {
         //private readonly ILogger<VillaAPIController> _logger;
         private readonly ILogger<VillaAPIController> _logger;
+        private readonly MagicVillaDbContext _dbContext;
         
-        public VillaAPIController(ILogger<VillaAPIController> logger)
+        public VillaAPIController(ILogger<VillaAPIController> logger,MagicVillaDbContext dbContext)
         {
             _logger = logger;
+            _dbContext = dbContext;
         }
         
-        [HttpGet("Route1",Name ="GetallVilla")]
+        [HttpGet("Route1",Name ="GetallVilla")]//route name =Route1
         public ActionResult <IEnumerable<VillaDto>> GetVillas()
         {
             _logger.LogInformation("Get all villas");
             return Ok(VillaStore.villas);//200
 
         }
-        [HttpGet("Route2", Name = "GetallVilla2")]
+        [HttpGet("Route2", Name = "GetallVilla2")]// route name =Route2
         public ActionResult<IEnumerable<VillaDto>> GetVillas2()
         {
             _logger.LogInformation("Get all villas");
             return Ok(VillaStore.villas);//200
 
         }
-        [HttpGet("id",Name ="GetVilla")]
+        [HttpGet("Getvillabyid",Name ="GetVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

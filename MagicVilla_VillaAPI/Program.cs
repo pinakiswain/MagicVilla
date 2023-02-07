@@ -1,3 +1,4 @@
+using MagicVilla_VillaAPI;
 using MagicVilla_VillaAPI.Data;
 using MagicVilla_VillaAPI.log;
 using MagicVilla_VillaAPI.Logging;
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<MagicVillaDbContext>(options => options.UseSqlServ
 Log.Logger = new LoggerConfiguration().MinimumLevel.Information()
     .WriteTo.File("log/VillLog.txt").CreateLogger();
 builder.Host.UseSerilog();
+builder.Services.AddAutoMapper(typeof(MappingCofig));//Register Automapper class
 builder.Services.AddControllers(options=>options.ReturnHttpNotAcceptable=true).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -1,5 +1,4 @@
 ﻿using MagicVilla_VillaAPI.Data;
-using MagicVilla_VillaAPI.Logging;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dto;
 using Microsoft.AspNetCore.JsonPatch;
@@ -8,20 +7,29 @@ using System.Collections;
 
 namespace MagicVilla_VillaAPI.Controllers
 {
-    [Route("apiv/Villa")]
+    [Route("api/Villa")]
     [ApiController]
     public class VillaAPIController: ControllerBase
     {
         //private readonly ILogger<VillaAPIController> _logger;
-        private readonly ILogging _logger;
-        public VillaAPIController(ILogging logger)
+        private readonly ILogger<VillaAPIController> _logger;
+        
+        public VillaAPIController(ILogger<VillaAPIController> logger)
         {
             _logger = logger;
         }
-        [HttpGet(Name ="GetallVilla")]
+        
+        [HttpGet("Route1",Name ="GetallVilla")]
         public ActionResult <IEnumerable<VillaDto>> GetVillas()
         {
-            _logger.Log("Get all villas", "Error");
+            _logger.LogInformation("Get all villas");
+            return Ok(VillaStore.villas);//200
+
+        }
+        [HttpGet("Route2", Name = "GetallVilla2")]
+        public ActionResult<IEnumerable<VillaDto>> GetVillas2()
+        {
+            _logger.LogInformation("Get all villas");
             return Ok(VillaStore.villas);//200
 
         }
@@ -43,6 +51,7 @@ namespace MagicVilla_VillaAPI.Controllers
             }
             return Ok(Villa);//200
         }
+       
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -69,8 +78,8 @@ namespace MagicVilla_VillaAPI.Controllers
             }
             villaDto.Id = VillaStore.villas.Max(u=>u.Id)+1;
             VillaStore.villas.Add(villaDto);
-            //return Ok(villaDto);
-            return CreatedAtRoute("GetVilla", new {id=villaDto.Id}, villaDto);
+            return Ok(villaDto);
+            //return CreatedAtRoute("GetVilla", new {id=villaDto.Id}, villaDto);
         }
         [HttpDelete("id",Name ="DeleteVilla")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

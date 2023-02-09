@@ -36,7 +36,7 @@ namespace MagicVilla_VillaAPI.Repository
         public async Task<ModelName> Getfirstordefaultasync(Expression<Func<ModelName, bool>>? Filter = null, bool Tracked = true)
         {
             IQueryable<ModelName> query = Dbset;
-
+           
             return await query.FirstOrDefaultAsync(Filter);
 
         }
@@ -46,8 +46,9 @@ namespace MagicVilla_VillaAPI.Repository
             IQueryable<ModelName> query = Dbset;
             if (Filter != null)
             {
-                query.Where(Filter);
+                query= query.Where(Filter);
             }
+        
             return await query.ToListAsync();
         }
 

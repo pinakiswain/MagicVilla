@@ -54,6 +54,7 @@ namespace MagicVilla_VillaAPI.Controllers
         public ActionResult<IEnumerable<VillaDto>> GetVillas2()
         {
             _logger.LogInformation("Get all villas");
+            var m = VillaStore.villas.Where(u => u.Id == 10);
             return Ok(VillaStore.villas);//200
 
         }

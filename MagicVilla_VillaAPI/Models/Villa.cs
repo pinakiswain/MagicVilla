@@ -17,9 +17,10 @@ namespace MagicVilla_VillaAPI.Models
         public string ImageUrl { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
-      
-       
-       
-       
+        public IEnumerable<VillaNumber> villaNumbers { get; set; }
+
+
+
+
     }
 }

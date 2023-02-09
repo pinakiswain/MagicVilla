@@ -19,6 +19,8 @@ Log.Logger = new LoggerConfiguration().MinimumLevel.Information()
 builder.Host.UseSerilog();
 builder.Services.AddScoped<IVillaRepository, VillaRepository>();// register the Villa repository
 builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();// register the VillaNumber repository
+builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();// register the Wrapper repository
+
 builder.Services.AddAutoMapper(typeof(MappingCofig));//Register Automapper class
 builder.Services.AddControllers(options=>options.ReturnHttpNotAcceptable=true).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

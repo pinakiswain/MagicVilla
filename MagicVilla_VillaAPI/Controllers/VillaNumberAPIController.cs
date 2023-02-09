@@ -14,16 +14,17 @@ namespace MagicVilla_VillaAPI.Controllers
     public class VillaNumberAPIController: ControllerBase
     {
         private readonly IVillaNumberRepository _dbVillanumber;
-        private readonly IVillaRepository _dbVilla;
-             
+        //private readonly IVillaRepository _dbVilla;
+        private readonly IRepositoryWrapper _wapper;
+
         protected APIRespose _response;
         private readonly IMapper _Mapper;
-        public VillaNumberAPIController(IVillaNumberRepository dbVillanumber, IMapper Mapper, IVillaRepository dbVilla)
+        public VillaNumberAPIController(IVillaNumberRepository dbVillanumber, IMapper Mapper, IRepositoryWrapper wrapper)
         {
-            _dbVillanumber = dbVillanumber;
-            _dbVilla= dbVilla;
+            _dbVillanumber= dbVillanumber;
             this._response = new APIRespose();
-            _Mapper=Mapper; 
+            _Mapper=Mapper;
+            _wapper = wrapper;
         }
         [HttpGet("GetAllVillaNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -32,7 +33,7 @@ namespace MagicVilla_VillaAPI.Controllers
         {
             try
             {
-                IEnumerable<VillaNumber> villaNumbers = await _dbVillanumber.GetAllasync();
+                IEnumerable<VillaNumber> villaNumbers = await _wapper.VillaNumber.GetAllasync();
                 if(villaNumbers.Count()==0)
                 {
                     _response.IsSuccess = false;
@@ -66,7 +67,7 @@ namespace MagicVilla_VillaAPI.Controllers
                     _response.ErrorMessages = new List<string> { "Enter Id" };
                     return BadRequest(_response);
                 }
-                var VillaNumber = await _dbVillanumber.Getfirstordefaultasync(u => u.VillaNo == id);
+                var VillaNumber = await _wapper.VillaNumber.Getfirstordefaultasync(u => u.VillaNo == id);
                 if (VillaNumber == null)
                 {
                     _response.IsSuccess = false;
@@ -95,7 +96,7 @@ namespace MagicVilla_VillaAPI.Controllers
                     _response.ErrorMessages = new List<string> { "Enter Id" };
                     return BadRequest(_response);
                 }
-                IEnumerable<VillaNumber> villaNumber=await _dbVillanumber.GetAllasync(u=>u.VillaId== VillaId);
+                IEnumerable<VillaNumber> villaNumber=await _wapper.VillaNumber.GetAllasync(u=>u.VillaId== VillaId);
             }
             catch (Exception ex)
             {
@@ -125,10 +126,10 @@ namespace MagicVilla_VillaAPI.Controllers
                     return BadRequest(_response);
                 }
                
-                var CheckVillaNumber = await _dbVillanumber.Getfirstordefaultasync(u => u.VillaNo == villaNumberCreateDto.VillaNo);
-                var CheckVillaIdExist = await _dbVilla.Getfirstordefaultasync(u => u.Id == villaNumberCreateDto.VillaId);
+                var CheckVillaNumber = await _wapper.VillaNumber.Getfirstordefaultasync(u => u.VillaNo == villaNumberCreateDto.VillaNo);
+                var CheckVillaIdExist = await _wapper.Villa.Getfirstordefaultasync(u => u.Id == villaNumberCreateDto.VillaId);
 
-                var m = await _dbVillanumber.Getasync(u => u.VillaNo == villaNumberCreateDto.VillaNo);
+                var m = await _wapper.VillaNumber.Getasync(u => u.VillaNo == villaNumberCreateDto.VillaNo);
                 if (CheckVillaNumber != null)
                 {
                     _response.IsSuccess = false;
@@ -141,7 +142,7 @@ namespace MagicVilla_VillaAPI.Controllers
                     ModelState.AddModelError("", "Vill Id not found");
                     return BadRequest(ModelState);
                 }
-                if (await _dbVilla.Getasync(u=>u.Id==villaNumberCreateDto.VillaId)==null)
+                if (await _wapper.Villa.Getasync(u=>u.Id==villaNumberCreateDto.VillaId)==null)
                 {
 
                 }
@@ -150,7 +151,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
                 }
                 VillaNumber villaNumber = _Mapper.Map<VillaNumber>(villaNumberCreateDto);
-                await _dbVillanumber.Createasync(villaNumber);
+                await _wapper.VillaNumber.Createasync(villaNumber);
                 _response.IsSuccess = true;
                 _response.StatusCode= HttpStatusCode.OK;
                 _response.Result= _Mapper.Map<VillaNumberDto>(villaNumberCreateDto);
@@ -207,14 +208,14 @@ namespace MagicVilla_VillaAPI.Controllers
                     return BadRequest(_response);
 
                 }
-                VillaNumber villaNumber=await _dbVillanumber.Getfirstordefaultasync(u=>u.VillaNo==id);
+                VillaNumber villaNumber=await _wapper.VillaNumber.Getfirstordefaultasync(u=>u.VillaNo==id);
                 if(villaNumber==null)
                 {
                     _response.IsSuccess = false;
                     _response.ErrorMessages = new List<string> { "No result found" };
                     return StatusCode(StatusCodes.Status404NotFound);
                 }
-              await  _dbVillanumber.Removeasync(villaNumber);
+              await _wapper.VillaNumber.Removeasync(villaNumber);
                 return NoContent();
             }
             catch (Exception ex)

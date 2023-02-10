@@ -179,7 +179,7 @@ namespace MagicVilla_VillaAPI.Controllers
                     return BadRequest(_response);
                 }
                 VillaNumber villaNumber=_Mapper.Map<VillaNumber>(villaNumberUpdateDto);
-                await _dbVillanumber.Updateasync(villaNumber);
+                await _wapper.VillaNumber.Updateasync(villaNumber);
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;
                 _response.Result=_Mapper.Map<VillaNumberUpdateDto>(villaNumber);

@@ -4,8 +4,12 @@ namespace MagicVilla_VillaAPI.Repository.IRepository
 {
     public interface IRepositoryWrapper
     {
-        IBaseRepository<Villa> Villa { get; }
-        IBaseRepository<VillaNumber> VillaNumber { get; }
        
+       
+        IRoomRepository Room { get; }
+        IVillaRepository Villa { get; }
+
+        IVillaNumberRepository VillaNumber { get; }
+
     }
 }

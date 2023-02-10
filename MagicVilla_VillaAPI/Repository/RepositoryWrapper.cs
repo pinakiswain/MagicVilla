@@ -9,26 +9,33 @@ namespace MagicVilla_VillaAPI.Repository
         private readonly MagicVillaDbContext _dbcontext;
         private BaseRepository<Villa> _Villa;
         private BaseRepository<VillaNumber> _VillaNumber;
+        private BaseRepository<Room> _Room;
+
         public RepositoryWrapper(MagicVillaDbContext dbcontext)
         {
             _dbcontext = dbcontext;
+            VillaNumber = new VillaNumberRepository(_dbcontext);
+            Villa = new VillaRepository(_dbcontext);
+            Room=new RoomRepository(_dbcontext);
+
         }
-        public IBaseRepository<Villa> Villa
+        public IVillaRepository Villa
         {
-            get
-            {
-                return _Villa ??
-                    (_Villa = new BaseRepository<Villa>(_dbcontext));
-            }
+            get;
+            private set;
+        }
+        public IRoomRepository Room
+        {
+            get;
+            private set;
         }
 
-        public IBaseRepository<VillaNumber> VillaNumber
+        public IVillaNumberRepository VillaNumber
         {
-            get
-            {
-                return _VillaNumber ??
-                    (_VillaNumber = new BaseRepository<VillaNumber>(_dbcontext));
-            }
+            get;
+            private set;
         }
+
+        
     }
 }
